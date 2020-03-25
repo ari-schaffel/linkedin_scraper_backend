@@ -8,7 +8,12 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
+
+added cors middleware for post/get problems to server
+see https://www.techiediaries.com/amp/django-cors
 """
+
+
 
 import os
 
@@ -38,10 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'backend.apps.BackendConfig'
+    'backend.apps.BackendConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'linkedin_scraper_backend.urls'
 

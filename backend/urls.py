@@ -5,6 +5,7 @@ from backend import views
 urlpatterns = [
     path('backend/', views.SnippetList.as_view()),
     path('backend/<int:pk>/', views.SnippetDetail.as_view()),
+    path('backend/urls', views.UrlList.as_view()),
     path('simple/', views.SimpleList.as_view())
 ]
 

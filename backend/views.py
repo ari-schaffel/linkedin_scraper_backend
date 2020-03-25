@@ -1,11 +1,23 @@
 from django.shortcuts import render
 from backend.models import Snippet,Simple
-from backend.serializers import SnippetSerializer,SimpleSerializer
+from backend.serializers import SnippetSerializer,SimpleSerializer,UrlSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 # Create your views here.
+
+
+class UrlList(APIView):
+    """
+    List all snippets, or create a new snippet.
+    """
+    def get(self, request, format=None):
+        snippets = Snippet.objects.all()    
+        serializer = UrlSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+
 
 
 class SnippetList(APIView):
@@ -18,12 +30,20 @@ class SnippetList(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        print(request.data)
-        print(1)
+
         serializer = SnippetSerializer(data=request.data)
+        d = dict(serializer.initial_data)
+        print(serializer.initial_data)
         if serializer.is_valid():
+            print(d['url'][0])
+            if d['url'][0] in Snippet.objects.values_list('url',flat  = True):
+                
+                d["message"] = "Already in DB"
+                return Response(d, status=status.HTTP_201_CREATED)
+              
+            d["message"] = f"{d['name'][0]} saved!"
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(d, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -73,3 +93,4 @@ class SimpleList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

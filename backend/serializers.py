@@ -8,6 +8,12 @@ class SnippetSerializer(serializers.ModelSerializer):
         'created','name','url','location','about_description',
         'company_name','professional_description'
                  ]
+class UrlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Snippet
+        fields = [
+        'url',
+                 ]
 
 class SimpleSerializer(serializers.ModelSerializer):
     class Meta:
